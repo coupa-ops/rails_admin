@@ -37,6 +37,9 @@
     filter_for_field = duplet[1]
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
+    ['v','o'].each do |k|
+      filter_hash[k] = filter_hash[k].is_a?(Array) ? filter_hash[k].collect { |v| h v } : (h filter_hash[k])
+    end
     field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
     field_options = case field.type
     when :enum

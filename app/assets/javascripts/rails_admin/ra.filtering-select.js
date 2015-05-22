@@ -94,7 +94,7 @@
       input.data("ui-autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
           .data("ui-autocomplete-item", item)
-          .append( $( "<a></a>" ).html( item.label || item.id ) )
+          .append( $( "<a></a>" ).append( $( "<strong></strong>" ).text( item.label || item.id ) ) )
           .appendTo(ul);
       };
 
@@ -129,7 +129,7 @@
                 "(?![^&;]+;)(?!<[^<>]*)(" +
                 $.ui.autocomplete.escapeRegex(request.term) +
                 ")(?![^<>]*>)(?![^&;]+;)", "gi"
-             ), "<strong>$1</strong>") : el.id,
+             ), "$1") : el.id,
             value: el.label || el.id,
             id: el.id || el.value
           };
