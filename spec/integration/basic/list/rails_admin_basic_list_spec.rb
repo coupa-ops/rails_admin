@@ -278,8 +278,8 @@ describe 'RailsAdmin Basic List', type: :request do
       end
 
       get index_path(model_name: 'player')
-      expect(response.body).to include(%{$.filters.append("Name", "name", "string", "", null, "", 1);}) # rubocop:disable StringLiterals
-      expect(response.body).to include(%{$.filters.append("Team", "team", "belongs_to_association", "", null, "", 2);}) # rubocop:diasble StringLiterals
+      expect(response.body).to include(%{$.filters.append("Name", "name", "string", "", "", "", 1);}) # rubocop:disable StringLiterals
+      expect(response.body).to include(%{$.filters.append("Team", "team", "belongs_to_association", "", "", "", 2);}) # rubocop:diasble StringLiterals
     end
   end
 
