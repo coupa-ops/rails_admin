@@ -14,7 +14,21 @@
     append: function(field_label, field_name, field_type, field_value, field_operator, field_options, index) {
       var value_name = 'f[' +  field_name + '][' + index + '][v]';
       var operator_name = 'f[' +  field_name + '][' + index + '][o]';
-      switch(field_type) {
+
+        if(field_type == "integer" && field_value!=""){
+            var tmp_value= field_value[0];
+            field_value[0]=tmp_value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
+        }
+
+        var position_start=field_value.indexOf("<");
+        var position_end=field_value.lastIndexOf(">");
+        if(position_start!=-1 && position_end!=-1){
+            var replace_string=field_value.substring(position_start,position_end+1);
+            var value_field=field_value.replace(replace_string,'');
+            field_value=value_field.replace('\"','');
+        }
+
+        switch(field_type) {
         case 'boolean':
           var control = '<select class="input-sm form-control" name="' + value_name + '">' +
             '<option value="_discard">...</option>' +
@@ -73,6 +87,8 @@
           var additional_control = '<input class="additional-fieldset input-sm form-control" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'integer':
+            var control = '<input type="text" class="input-small" name="' + value_name + '" value="' + field_value + '"/> ';
+            break;
         case 'decimal':
         case 'float':
           var control = '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + operator_name + '">' +
