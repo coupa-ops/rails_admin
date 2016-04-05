@@ -112,11 +112,19 @@ module RailsAdmin
     end
 
     def output(str)
+
+      str = formula_escape(str.to_s)
+
       # Can't use the CSV generator with encodings that are not supersets of ASCII-7
       return str.to_s if @encoding_to =~ NON_ASCII_ENCODINGS || !@iconv
 
       # Convert piece by piece
       @iconv.iconv(str.to_s) rescue str.to_s
     end
+
+    def formula_escape(str)
+      str =~ /^=/ ? "'" + str : str
+    end
+
   end
 end
