@@ -17,6 +17,20 @@ describe RailsAdmin::CSVConverter do
     expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match(/Number,Name/)
   end
 
+  it 'escapes formulas when generating CSV' do
+    RailsAdmin.config(Player) do
+      export do
+        field :number
+        field :name
+      end
+    end
+
+    FactoryGirl.create(:player, name: "=HYPERLINK")
+    objects = Player.all
+    schema = {only: [:name]}
+    expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to end_with("'=HYPERLINK\n")
+  end
+
   describe '#to_csv' do
     before do
       RailsAdmin.config(Player) do
