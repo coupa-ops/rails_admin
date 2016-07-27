@@ -89,14 +89,18 @@ module RailsAdmin
 
     def generate_csv_row(object)
       @fields.collect do |field|
-        field.with(object: object).export_value
+        formula_escape(field.with(object: object).export_value)
       end +
         @associations.flat_map do |association_name, option_hash|
           associated_objects = [object.send(association_name)].flatten.compact
           option_hash[:fields].collect do |field|
-            associated_objects.collect { |ao| field.with(object: ao).export_value.presence || @empty }.join(',')
+            associated_objects.collect { |ao| formula_escape(field.with(object: ao).export_value.presence) || @empty }.join(',')
           end
         end
+    end
+
+    def formula_escape(str)
+      str =~ /^=/ ? "'" + str : str
     end
   end
 end
